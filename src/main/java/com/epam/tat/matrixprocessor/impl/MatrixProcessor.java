@@ -1,90 +1,168 @@
 package com.epam.tat.matrixprocessor.impl;
 
 import com.epam.tat.matrixprocessor.IMatrixProcessor;
+import com.epam.tat.matrixprocessor.exception.MatrixProcessorException;
 
-/**
- * Function Description:
- * Complete the functions below. All methods must work with matrices of the double type.
- *
- * Constraints:
- * 0 < m < 10
- * 0 < n < 10
- * where m - number of rows in matrix
- * where n - number of columns in matrix
- *
- * In case of incorrect input values or inability to perform a calculation, the method should throw an appropriate
- * exception.
- *
- */
+
 public class MatrixProcessor implements IMatrixProcessor {
 
-	/**
-	 * Matrix transpose is an operation on a matrix where its rows become columns with the same numbers.
-	 * Ex.:
-	 * |1 2|			|1 3 5|
-	 * |3 4|   ====>	|2 4 6|
-	 * |5 6|
-	 *
-	 * @param matrix - matrix for transposition
-	 * @return the transposed matrix
-	 */
 	@Override
 	public double[][] transpose(double[][] matrix) {
-		throw new UnsupportedOperationException("You need to implement this method");
+		int n = matrix.length;
+		int m = matrix[0].length;
+		double [][] resultMatrix = new double[m][n];
+		for (int i = 0; i < n ; i++)  {
+			for (int j = 0; j < m; j++) {
+				resultMatrix [j][i] = matrix [i][j];
+			}
+		}
+		return resultMatrix;
 	}
 
-	/**
-	 * The method flips the matrix clockwise.
-	 * Ex.:
-	 * * |1 2|			|5 3 1|
-	 * * |3 4|   ====>	|6 4 2|
-	 * * |5 6|
-	 *
-	 * @param matrix - rotation matrix
-	 * @return rotated matrix
-	 */
+
 	@Override
 	public double[][] turnClockwise(double[][] matrix) {
-		throw new UnsupportedOperationException("You need to implement this method");
+		int n = matrix.length;
+		int m = matrix[0].length;
+		double [][] resultMatrix = new double[m][n];
+		for (int i = 0; i < n ; i++)  {
+			for (int j = 0; j < m; j++) {
+				resultMatrix [j][n-i-1] = matrix [i][j];
+			}
+		}
+		return resultMatrix;
 	}
 
-	/**
-	 * This method multiplies matrix firstMatrix by matrix secondMatrix
-	 *
-	 * See {https://en.wikipedia.org/wiki/Matrix_multiplication}
-	 *
-	 * @param firstMatrix  - first matrix to multiply
-	 * @param secondMatrix - second matrix to multiply
-	 * @return result matrix
-	 */
 	@Override
 	public double[][] multiplyMatrices(double[][] firstMatrix, double[][] secondMatrix) {
-		throw new UnsupportedOperationException("You need to implement this method");
-	}
+		int n = firstMatrix.length;
+		int m = firstMatrix[0].length ;
+		int n1 = secondMatrix.length;
+		int m1 = secondMatrix[0].length;
 
-	/**
-	 * This method returns the inverse of the matrix
-	 *
-	 * See {https://en.wikipedia.org/wiki/Invertible_matrix}
-	 *
-	 * @param matrix - input matrix
-	 * @return inverse matrix for input matrix
-	 */
-	@Override
+
+		if (n1 != m) {
+			System.out.println("multiplication is impossible ");
+		}
+		double [][] resultMatrix = new double [m][n];
+
+		for (int i = 0; i < n ; i++)  {
+			for (int j = 0; j < m; j++) {
+				for (int l = 0; l < m1; l++) {
+					resultMatrix [i][j] += firstMatrix [i][l] * secondMatrix [l][j];
+				}
+			}
+		}
+		return resultMatrix;
+		}
+
+		@Override
 	public double[][] getInverseMatrix(double[][] matrix) {
-		throw new UnsupportedOperationException("You need to implement this method");
+		int n = matrix.length;
+		int m = matrix[0].length;
+		double determinant = getMatrixDeterminant(matrix);
+		if (m != n || determinant == 0 ) {
+			throw new MatrixProcessorException("Matrix can't be inversed");
+		}
+		double [][] transposeMatrix = transpose(matrix);
+		double [][] unionMatrix = getAlgebraicAdditionsMatrix(transposeMatrix);
+		double [][] inverseMatrix = new double[n][n];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				inverseMatrix[i][j] = (double) Math.round(((1/ determinant) * unionMatrix[i][j]) * 1000) / 1000;
+			}
+		}
+		return inverseMatrix;
 	}
 
-	/**
-	 * This method returns the determinant of the matrix
-	 *
-	 * See {https://en.wikipedia.org/wiki/Determinant}
-	 *
-	 * @param matrix - input matrix
-	 * @return determinant of input matrix
-	 */
+
 	@Override
 	public double getMatrixDeterminant(double[][] matrix) {
-		throw new UnsupportedOperationException("You need to implement this method");
+		int n = matrix.length;
+		int m = matrix[0].length;
+		double determinant = 0;
+
+		if (m != n) {
+			throw new ArithmeticException ("finding the determinant is impossible");
+		}
+ 		if (n == 2) {
+		determinant = (matrix [0][0] * matrix [1][1]) - (matrix [0][1] * matrix [1][0]);
+		}
+		if (n == 3) {
+			determinant = (matrix [0][0] * matrix [1][1] * matrix [2][2]
+					      + matrix [0][1] * matrix [1][2] * matrix [2][0]
+		                  + matrix [0][2] * matrix [1][0] * matrix [2][1])
+					      -(matrix [0][2] * matrix [1][1] * matrix [2][0]
+					      - matrix [0][1] * matrix [1][0] * matrix [2][2]
+					      - matrix [0][0] * matrix [1][2] * matrix [2][1]);
+		}
+		return determinant;
 	}
+
+	public double[][] getAlgebraicAdditionsMatrix(double [][] matrix) {
+		int n = matrix.length;
+		double [][] minorMatrix = getMinorMatrix(matrix);
+		double [][] algebraicAdditionsMatrix = new double[n][n];
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				algebraicAdditionsMatrix[i][j] = Math.pow(-1, ((i+1) + (j+1))) * minorMatrix[i][j];
+			}
+		}
+		return  algebraicAdditionsMatrix;
+	}
+
+
+	public double [][] getMatrixWithLessCapacity(double [][] matrix, int a, int b) {
+		int n = matrix.length;
+		int z = 0; // i
+		int y = 0; // j
+		double [][] newMatrix = new double [n-1][n-1];
+		for (int i = 0; i < n; i++) {
+			y = 0;
+			for (int j = 0; j < n; j++) {
+				if (i != a && j != b) {
+					newMatrix[z][y] = matrix[i][j];
+					y = y + 1;
+				}
+			}
+			if (i != a) {
+				z =  z + 1;
+			}
+		}
+		return newMatrix;
+	}
+
+	public double [][] getMinorMatrix(double [][] matrix) {
+		int n = matrix.length;
+		double [][] minorMatrix = new double [n][n];
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				double[][] smallMatrix = getMatrixWithLessCapacity(matrix, i, j);
+				if (smallMatrix.length > 1) {
+					double determinant = getMatrixDeterminant(smallMatrix);
+					minorMatrix[i][j] = determinant;
+				} else {
+					minorMatrix[i][j] = smallMatrix[0][0];
+				}
+			}
+		}
+		return  minorMatrix;
+	}
+
+	public void printMatrix(double [][] matrix) {
+		int n = matrix.length;
+		for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print(matrix[i][j] );
+                System.out.print(", ");
+            }
+            System.out.print("\n");
+        }
+
+        System.out.println("___________________");
+	}
+
 }
+
