@@ -80,6 +80,7 @@ public class MatrixProcessor implements IMatrixProcessor {
 		int n = matrix.length;
 		int m = matrix[0].length;
 		double determinant = 0;
+		double [][] algebraicAdditionsMatrix = getAlgebraicAdditionsMatrix(matrix);
 
 		if (m != n) {
 			throw new ArithmeticException ("finding the determinant is impossible");
@@ -95,6 +96,11 @@ public class MatrixProcessor implements IMatrixProcessor {
 					      + matrix [0][2] * matrix [1][0] * matrix [2][1]
 					      - matrix [0][2] * matrix [1][1] * matrix [2][0];
 		}
+		if (n > 3) {
+			for (int i = 0; i < n; i++) {
+					determinant += matrix [0][n] * algebraicAdditionsMatrix [0][n];
+				}
+			}
 		return determinant;
 	}
 
