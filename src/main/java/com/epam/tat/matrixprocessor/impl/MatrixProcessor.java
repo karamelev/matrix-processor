@@ -8,8 +8,8 @@ public class MatrixProcessor implements IMatrixProcessor {
 
 	@Override
 	public double[][] transpose(double[][] matrix) {
-		int n = matrix.length-1;
-		int m = matrix[0].length-1;
+		int n = matrix.length;
+		int m = matrix[0].length;
 		double [][] resultMatrix = new double[m][n];
 		for (int i = 0; i < n ; i++)  {
 			for (int j = 0; j < m; j++) {
@@ -22,8 +22,8 @@ public class MatrixProcessor implements IMatrixProcessor {
 
 	@Override
 	public double[][] turnClockwise(double[][] matrix) {
-		int n = matrix.length-1;
-		int m = matrix[0].length-1;
+		int n = matrix.length;
+		int m = matrix[0].length;
 		double [][] resultMatrix = new double[m][n];
 
 		for (int i = 0; i < n ; i++)  {
@@ -36,10 +36,10 @@ public class MatrixProcessor implements IMatrixProcessor {
 
 	@Override
 	public double[][] multiplyMatrices(double[][] firstMatrix, double[][] secondMatrix) {
-		int n = firstMatrix.length-1;
-		int m = firstMatrix[0].length-1;
-		int n1 = secondMatrix.length-1;
-		int m1 = secondMatrix[0].length-1;
+		int n = firstMatrix.length;
+		int m = firstMatrix[0].length ;
+		int n1 = secondMatrix.length;
+		int m1 = secondMatrix[0].length;
 		if (n1 != m) {
 			throw new MatrixProcessorException("multiplication is impossible");
 		}
@@ -57,8 +57,8 @@ public class MatrixProcessor implements IMatrixProcessor {
 
 		@Override
 	public double[][] getInverseMatrix(double[][] matrix) {
-		int n = matrix.length-1;
-		int m = matrix[0].length-1;
+		int n = matrix.length;
+		int m = matrix[0].length;
 		double determinant = getMatrixDeterminant(matrix);
 		if (m != n || determinant == 0 ) {
 			throw new MatrixProcessorException("Matrix can't be inversed");
@@ -77,8 +77,8 @@ public class MatrixProcessor implements IMatrixProcessor {
 
 	@Override
 	public double getMatrixDeterminant(double[][] matrix) {
-		int n = matrix.length-1;
-		int m = matrix[0].length-1;
+		int n = matrix.length;
+		int m = matrix[0].length;
 		double determinant = 0;
 		double [][] algebraicAdditionsMatrix = getAlgebraicAdditionsMatrix(matrix);
 
@@ -97,15 +97,15 @@ public class MatrixProcessor implements IMatrixProcessor {
 					      - matrix [0][2] * matrix [1][1] * matrix [2][0];
 		}
 		if (n > 3) {
-			for (int i = 0; i < n; i++) {
-					determinant += matrix [0][n] * algebraicAdditionsMatrix [0][n];
+			for (int i = 0; i < n-1; i++) {
+					determinant += matrix [0][n-1] * algebraicAdditionsMatrix [0][n-1];
 				}
 			}
 		return determinant;
 	}
 
 	public double[][] getAlgebraicAdditionsMatrix(double [][] matrix) {
-		int n = matrix.length-1;
+		int n = matrix.length;
 		double [][] minorMatrix = getMinorMatrix(matrix);
 		double [][] algebraicAdditionsMatrix = new double[n][n];
 
@@ -119,7 +119,7 @@ public class MatrixProcessor implements IMatrixProcessor {
 
 
 	public double [][] getMatrixWithLessCapacity(double [][] matrix, int a, int b) {
-		int n = matrix.length-1;
+		int n = matrix.length;
 		int z = 0; // i
 		int y = 0; // j
 		double [][] newMatrix = new double [n-1][n-1];
@@ -139,7 +139,7 @@ public class MatrixProcessor implements IMatrixProcessor {
 	}
 
 	public double [][] getMinorMatrix(double [][] matrix) {
-		int n = matrix.length-1;
+		int n = matrix.length;
 		double [][] minorMatrix = new double [n][n];
 
 		for (int i = 0; i < n; i++) {
@@ -157,7 +157,7 @@ public class MatrixProcessor implements IMatrixProcessor {
 	}
 
 	public void printMatrix(double [][] matrix) {
-		int n = matrix.length-1;
+		int n = matrix.length;
 		for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 System.out.print(matrix[i][j] );
