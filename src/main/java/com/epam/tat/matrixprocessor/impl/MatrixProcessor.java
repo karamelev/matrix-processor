@@ -22,6 +22,7 @@ public class MatrixProcessor implements IMatrixProcessor {
 
 	@Override
 	public double[][] turnClockwise(double[][] matrix) {
+
 		int n = matrix.length;
 		int m = matrix[0].length;
 		double [][] resultMatrix = new double[m][n];
@@ -60,8 +61,12 @@ public class MatrixProcessor implements IMatrixProcessor {
 		int n = matrix.length;
 		int m = matrix[0].length;
 		double determinant = getMatrixDeterminant(matrix);
-		if (m != n || determinant == 0 ) {
+		if (m != n ) {
 			throw new MatrixProcessorException("Matrix can't be inversed");
+		}
+		if (determinant == 0) {
+			throw new MatrixProcessorException("Matrix can't be inversed");
+
 		}
 		double [][] transposeMatrix = transpose(matrix);
 		double [][] unionMatrix = getAlgebraicAdditionsMatrix(transposeMatrix);
@@ -80,6 +85,9 @@ public class MatrixProcessor implements IMatrixProcessor {
 		int n = matrix.length;
 		int m = matrix[0].length;
 		double determinant = 0;
+		if (m != n ) {
+			throw new MatrixProcessorException("Matrix can't be inversed");
+		}
 		double [][] algebraicAdditionsMatrix = getAlgebraicAdditionsMatrix(matrix);
 
 		if (m != n) {
@@ -106,6 +114,10 @@ public class MatrixProcessor implements IMatrixProcessor {
 
 	public double[][] getAlgebraicAdditionsMatrix(double [][] matrix) {
 		int n = matrix.length;
+		int m = matrix[0].length;
+		if (m != n ) {
+			throw new MatrixProcessorException("Matrix can't be inversed");
+		}
 		double [][] minorMatrix = getMinorMatrix(matrix);
 		double [][] algebraicAdditionsMatrix = new double[n][n];
 
