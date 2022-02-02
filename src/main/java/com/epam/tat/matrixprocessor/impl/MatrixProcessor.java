@@ -77,7 +77,7 @@ public class MatrixProcessor implements IMatrixProcessor {
 
 	@Override
 	public double getMatrixDeterminant(double[][] matrix) {
-		int n = matrix.length-1;
+		int n = matrix.length;
 		int m = matrix[0].length;
 		double determinant = 0;
 		double [][] algebraicAdditionsMatrix = getAlgebraicAdditionsMatrix(matrix);
