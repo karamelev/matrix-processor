@@ -49,7 +49,7 @@ public class MatrixProcessor implements IMatrixProcessor {
 		for (int i = 0; i < n ; i++)  {
 			for (int j = 0; j < m; j++) {
 				for (int l = 0; l < m1; l++) {
-					resultMatrix [i][j] += (double) Math.round ((firstMatrix [i][l] * secondMatrix [l][j]) * 1000) / 1000;
+					resultMatrix [i][j] += (double)Math.round((firstMatrix[i][l] * secondMatrix[l][j]) * 1000) / 1000;
 				}
 			}
 		}
