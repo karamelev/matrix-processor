@@ -41,7 +41,7 @@ public class MatrixProcessor implements IMatrixProcessor {
 		int m = firstMatrix[0].length ;
 		int n1 = secondMatrix.length;
 		int m1 = secondMatrix[0].length;
-		if (n1 != m) {
+		if (m != n1) {
 			throw new MatrixProcessorException("multiplication is impossible");
 		}
 		double [][] resultMatrix = new double [m][n];
@@ -49,7 +49,7 @@ public class MatrixProcessor implements IMatrixProcessor {
 		for (int i = 0; i < n ; i++)  {
 			for (int j = 0; j < m; j++) {
 				for (int l = 0; l < m1; l++) {
-					resultMatrix [i][j] += Math.round ((firstMatrix [i][l] * secondMatrix [l][j]) * 1000) / 1000;
+					resultMatrix [i][j] += (double) Math.round ((firstMatrix [i][l] * secondMatrix [l][j]) * 1000) / 1000;
 				}
 			}
 		}
@@ -66,7 +66,6 @@ public class MatrixProcessor implements IMatrixProcessor {
 		}
 		if (determinant == 0) {
 			throw new MatrixProcessorException("Matrix can't be inversed");
-
 		}
 		double [][] transposeMatrix = transpose(matrix);
 		double [][] unionMatrix = getAlgebraicAdditionsMatrix(transposeMatrix);
