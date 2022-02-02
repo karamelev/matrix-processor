@@ -97,7 +97,7 @@ public class MatrixProcessor implements IMatrixProcessor {
 					      - matrix [0][2] * matrix [1][1] * matrix [2][0];
 		}
 		if (n > 3) {
-			for (int i = 0; i < n-1; i++) {
+			for (int i = 0; i < n; i++) {
 					determinant += matrix [0][n-1] * algebraicAdditionsMatrix [0][n-1];
 				}
 			}
